@@ -1,0 +1,124 @@
+#!/usr/bin/perl -w
+
+use Term::ANSIColor;
+
+### Parmaters ###
+my $LINE_WIDTH  =  60;
+my $MAX_LEVELS  =  100;
+
+
+### Global initialization ###
+my @BRANCHED    =  (0) x $MAX_LEVELS;
+my %REC         =  ();
+my @INDENTS     =  ();
+
+my %Entry       =  ();
+my @OUTPUTS     =  ();
+
+
+### Record Indents (folder levels) ###
+my $row = 0;
+
+my @dirs = `sort -k2 $ENV{'DIRSFILE'}`;
+
+for (@dirs) {
+
+    $_=~/\s*(\d*)\s*(.*)/;
+
+    my $dir_num = $1;
+    my $path    = $2;
+
+    my @items = split(/\//, $path);
+
+    shift @items;
+
+    for (my $i=0; $i<@items; $i++) {
+
+        my $cur_dir = $items[$i];
+
+        my $whole_path = join("", @items[0..$i]);
+
+        if (not defined $REC{$whole_path}) {
+
+            if ($i == $#items) {
+
+                $Entry{$row} = $dir_num;
+            }
+
+            push @INDENTS, "$i|$cur_dir";
+
+            $REC{$whole_path} = 1;
+
+            $row = $row + 1;
+        }
+    }
+}
+
+
+### Determine Outputs ###
+@INDENTS = reverse @INDENTS;
+
+for (@INDENTS) {
+
+    my ($indent, $dir) = split(/\|/, $_);
+
+    my $hanger = "";
+
+    for (my $j=0;$j<$indent;$j++) {
+
+        if ($BRANCHED[$j] == 1 ) {
+
+            $hanger = $hanger."│   ";
+        }
+        else {
+
+            $hanger = $hanger."    ";
+        }
+    }
+
+    $BRANCHED[$indent] = 1;
+
+    for (my $j=$indent+1;$j<$MAX_LEVELS;$j++) {
+
+        $BRANCHED[$j] = 0;
+    }
+
+    push @OUTPUTS, $hanger."│__ $dir";
+}
+
+
+### Output  ###
+@OUTPUTS = reverse @OUTPUTS;
+
+for (my $i=0; $i<@OUTPUTS; $i++) {
+
+    if (defined $Entry{$i} ) {
+
+        if ( $Entry{$i} == 0 ) {
+
+            print color "red";
+
+        } elsif ( $Entry{$i} == 1 ) {
+
+            print color "green";
+
+        } else {
+
+            print color "yellow";
+        }
+
+
+        my $right_margin = $LINE_WIDTH - length($OUTPUTS[$i]);
+
+        my $right_fillings = "." x $right_margin;
+
+        print $OUTPUTS[$i].$right_fillings."($Entry{$i})\n";
+    }
+    else {
+
+        print $OUTPUTS[$i]."\n";
+    }
+
+    print color "reset";
+}
+
