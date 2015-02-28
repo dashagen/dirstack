@@ -68,7 +68,7 @@ for (@INDENTS) {
 
         if ($BRANCHED[$j] == 1 ) {
 
-            $hanger = $hanger."│   ";
+            $hanger = $hanger."|   ";
         }
         else {
 
@@ -83,7 +83,7 @@ for (@INDENTS) {
         $BRANCHED[$j] = 0;
     }
 
-    push @OUTPUTS, $hanger."│__ $dir";
+    push @OUTPUTS, $hanger."|__ $dir";
 }
 
 
@@ -94,11 +94,19 @@ for (my $i=0; $i<@OUTPUTS; $i++) {
 
     if (defined $Entry{$i} ) {
 
+        my $right_margin = $LINE_WIDTH - length($OUTPUTS[$i]);
+
+        my $right_fillings = "." x $right_margin;
+
+        my ($hanger, $dir) = split(/\|__/, $OUTPUTS[$i]);
+
+        print $hanger;
+
         if ( $Entry{$i} == 0 ) {
 
-            print color "red";
+            print color "white on_blue";
 
-        } elsif ( $Entry{$i} == 1 ) {
+        } elsif ( $Entry{$i} ==1) {
 
             print color "green";
 
@@ -107,18 +115,16 @@ for (my $i=0; $i<@OUTPUTS; $i++) {
             print color "yellow";
         }
 
-
-        my $right_margin = $LINE_WIDTH - length($OUTPUTS[$i]);
-
-        my $right_fillings = "." x $right_margin;
-
-        print $OUTPUTS[$i].$right_fillings."($Entry{$i})\n";
+        print "|__$dir".$right_fillings."($Entry{$i})";
     }
     else {
 
-        print $OUTPUTS[$i]."\n";
+        print color "white";
+        print $OUTPUTS[$i];
     }
 
     print color "reset";
+    print "\n";
 }
+
 
