@@ -1,0 +1,68 @@
+#!/usr/bin/perl -w
+
+my $HOME_DIR = $ENV{'HOME'};
+
+# Get current tty number
+my $cur_tty = `tty|sed -e 's/[^0-9]//g'`;
+chomp $cur_tty;
+
+
+# Get online ttys
+my @online_ttys = `find /dev/ttys* -user \$USER | sed -e 's/[^0-9]//g' | grep -v -w $cur_tty`;
+chomp @online_ttys;
+
+
+# Get Project table
+my @ptable = `cat $HOME_DIR/.dirstack/prjtable.txt`;
+chomp @ptable;
+
+
+# Identify offline prjnumber
+my @nochg_table = ();
+my $cur_prjnum = "";
+
+for (@ptable) {
+
+    my ($pnum, $tty) = split(",", $_);
+
+    if ( isMember($tty, \@online_ttys) || $cur_prjnum ne "" ) {
+        push @nochg_table, "$pnum,$tty";
+    } else {
+        $cur_prjnum = $pnum;
+    }
+}
+
+
+# Update Project table
+if ( $cur_prjnum eq "" ) {
+
+    $cur_prjnum = @nochg_table + 1;
+    push @nochg_table, "$cur_prjnum,$cur_tty";
+
+    `echo \"UN\" >| $HOME_DIR/.dirstack/prjname$cur_prjnum`;
+    `echo ' 0  $HOME_DIR' >| $HOME_DIR/.dirstack/dirstack$cur_prjnum`;
+
+} else {
+
+    push @nochg_table, "$cur_prjnum,$cur_tty";
+}
+
+open(FF,">$HOME_DIR/.dirstack/prjtable.txt") || die "cant open file\n";
+print FF $_."\n" for (@nochg_table);
+close(FF);
+
+
+# Output current project number
+print $cur_prjnum;
+
+
+###################################################
+###################################################
+sub isMember {
+    my ($element, $ref) = @_;
+    my $result = 0;
+    for (@$ref) {
+       $result = 1 if ($element == $_ );
+    }
+    return($result);
+}

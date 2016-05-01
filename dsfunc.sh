@@ -2,43 +2,17 @@
 # in a tree layout
 
 ###################################
-##  Initialization      ###########
-###################################
-
-# Get current tty number
-tty_num=$(tty|sed -e 's/[^0-9]//g')
-
-export DIRSFILE="$HOME/.dirstack/dirstack$tty_num"
-
-
-# Load dirstack and Initialize dir# variables
-dirlist=( `sort -k1nr $HOME/.dirstack/dirstack$tty_num|cut -c5-` )
-
-for i in `seq 0 $((${#dirlist[@]}-1))`;do
-
-    export dir$i=${dirlist[$i]}
-
-    pushd ${dirlist[$i]} >/dev/null
-done
-
-popd -0 >/dev/null
-
-echo
-echo "Previously..."
-dirs -v -l
-echo
-
-
-
-###################################
 ##  Define Functions  #############
 ###################################
 function updatedirs()
 {
+
+    IFS=$'\r\n'
+
     dirlist=( `cat $DIRSFILE|cut -c5-` )
 
     for i in `seq 0 $((${#dirlist[@]}-1))`;do
-        export dir$i=${dirlist[$i]}
+        export dir$i="${dirlist[$i]}"
     done
 }
 
@@ -46,9 +20,19 @@ function updatedirs()
 # Set the title of an xterm to $PWD
 function xtitle()
 {
-    echo -ne "\e]0;[$tty_num],$(basename "$(pwd)")\a"
+    echo -ne "\033]0;[$prj_num][$PRJN]:$(basename "$(pwd)")\a"
 }
 
+
+# Change project name
+function chgprj()
+{
+    if [ $1 ]; then
+        PRJN=$1
+        echo $PRJN >| $HOME/.dirstack/prjname$prj_num
+    fi
+    xtitle
+}
 
 # Clear current dirstack file
 function cstack()
@@ -120,7 +104,7 @@ function r()
         pushd >/dev/null
     fi
 
-    ls --color -ltr
+    ls -G -ltr
     echo
     sd
 }
@@ -139,15 +123,16 @@ function g()
 
 
 # Push into dirstack
-function pu ()
+function pu()
 {
-    if [ $1 ]; then
-        p_dir=${1/%\//}
+    if [ "$1" ]; then
+        p_dir="${1/%\//}"
 
         dirlist=( `cat $DIRSFILE|cut -c5-` )
 
         match_idx=-1
 
+        #check if dir already in the stack
         for i in `seq 0 $((${#dirlist[@]}-1))`;do
             if [ "${dirlist[$i]}" = "$p_dir" ]; then
                 match_idx=$i
@@ -200,4 +185,53 @@ sdd ()
     echo "\-------------------------------------------------------------------"
 }
 
+
+# Remove branch from the parent
+db ()
+{
+    if [ $1 ]; then
+        pdir=$(dirname $(eval "echo \$dir$1"))
+
+        for dn in `grep $pdir $DIRSFILE|awk '{print $1}'|sort -k1nr`; do
+            popd +$dn > /dev/null
+        done;
+
+        sd
+    else
+        echo "Specifiy a directory number"
+    fi
+}
+
+
+###################################
+##  Initialization      ###########
+###################################
+
+IFS=$'\r\n'
+
+# Get current Project Number
+export prj_num=$(getprjnum)
+
+# Update Project Name and dirstack
+export PRJN=$(cat $HOME/.dirstack/prjname$prj_num)
+export DIRSFILE="$HOME/.dirstack/dirstack$prj_num"
+
+# Load dirstack and Initialize dir# variables
+dirlist=( `sort -k1nr $HOME/.dirstack/dirstack$prj_num|cut -c5-` )
+
+for i in `seq 0 $((${#dirlist[@]}-1))`;do
+
+    export dir$i="${dirlist[$i]}"
+
+    pushd "${dirlist[$i]}" >/dev/null
+done
+
+popd -0 >/dev/null
+
+echo
+echo "Previously..."
+dirs -v -l
+echo
+
+xtitle
 
