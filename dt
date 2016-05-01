@@ -1,6 +1,11 @@
 #!/usr/bin/perl -w
 
 use Term::ANSIColor;
+use Getopt::Std;
+
+my %options = ();
+getopts("s",\%options);
+
 
 ### Parmaters ###
 my $LINE_WIDTH  =  60;
@@ -100,6 +105,7 @@ for (my $i=0; $i<@OUTPUTS; $i++) {
 
         my ($hanger, $dir) = split(/\|__/, $OUTPUTS[$i]);
 
+
         print $hanger;
 
         if ( $Entry{$i} == 0 ) {
@@ -108,7 +114,7 @@ for (my $i=0; $i<@OUTPUTS; $i++) {
 
         } elsif ( $Entry{$i} ==1) {
 
-            print color "green";
+            print color "red";
 
         } else {
 
@@ -125,6 +131,22 @@ for (my $i=0; $i<@OUTPUTS; $i++) {
 
     print color "reset";
     print "\n";
+
+    # Add spacing two overcrowded tree
+    if (defined $options{s}) {
+        if (defined $OUTPUTS[$i+1]) {
+
+            my $pos = index($OUTPUTS[$i], "|_");
+
+            if (length($OUTPUTS[$i+1])> $pos &&
+                    substr($OUTPUTS[$i+1], $pos, 1) ne "|" &&
+                    substr($OUTPUTS[$i+1], $pos, 1) ne " " ) {
+
+                print substr($OUTPUTS[$i], 0, $pos);
+                print "\n";
+            }
+        }
+    }
 }
 
 
