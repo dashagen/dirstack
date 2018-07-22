@@ -1,5 +1,5 @@
 ## Introduction
-**dirstack-plus** is an enhanced version of the [dirstack](ftp://ftp.gnu.org/old-gnu/Manuals/bash-2.02/html_node/bashref_63.html#SEC71) utiliy in unix/linux systems which maintains a list of recently-visited directories and provides commands(pushd, popd, dirs) to view and switch between these directories. dirstack-plus enhances these simple commands to provide a tree view of the dirstack and much more convenient commands to navigate through it. 
+**dirstack-plus** is an enhanced version of the [dirstack] (ftp://ftp.gnu.org/old-gnu/Manuals/bash-2.02/html_node/bashref_63.html#SEC71) utiliy in unix/linux systems which maintains a list of recently-visited directories and provides commands(pushd, popd, dirs) to view and switch between these directories. dirstack-plus enhances these simple commands to provide a tree view of the dirstack and much more convenient commands to navigate through it. 
 
 ## Installation 
 
