@@ -90,16 +90,23 @@ function cd()
 
 
 # Rotate the dirstack
-function r()
-{
+function r() 
+{ 
     if [ $1 ]; then
 
-        for i in `seq 2 $1`; do
-            pushd >/dev/null
-            pushd +1 >/dev/null
-        done
+        if [ $1 -ne 0 ]; then
 
-        pushd >/dev/null
+            let "a = $1 -1"
+
+            if [ $a -gt 0 ]; then
+                for i in `seq 1 $a`;do
+                    pushd >/dev/null
+                    pushd +1 >/dev/null
+                done
+            fi
+
+            pushd >/dev/null
+        fi
     else
         pushd >/dev/null
     fi
@@ -108,6 +115,7 @@ function r()
     echo
     sd
 }
+
 
 
 # Go to dirstack by keyword
