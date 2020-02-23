@@ -8,47 +8,54 @@ chomp $cur_tty;
 
 
 # Get online ttys
+
+## For AIX
+#my @online_ttys = `find /dev/pts -user \$USER | sed -e 's/.*\\///gg' | grep -v -w $cur_tty`;
+
+## For MacOS
 my @online_ttys = `find /dev/ttys* -user \$USER | sed -e 's/[^0-9]//g' | grep -v -w $cur_tty`;
 chomp @online_ttys;
 
 
-# Get Project table
-my @ptable = `cat $HOME_DIR/.dirstack/prjtable.txt`;
+
+# Load project table
+my @ptable = `cat $HOME_DIR/.dirstack/prjtable.txt | sort -t ',' -k1n`;
 chomp @ptable;
 
 
-# Identify offline prjnumber
-my @nochg_table = ();
-my $cur_prjnum = "";
+
+# Create online (prj#, tty#) table
+my @online_table = ();
 
 for (@ptable) {
 
     my ($pnum, $tty) = split(",", $_);
 
-    if ( isMember($tty, \@online_ttys) || $cur_prjnum ne "" ) {
-        push @nochg_table, "$pnum,$tty";
-    } else {
-        $cur_prjnum = $pnum;
+    if ( isMember($tty, \@online_ttys) ) {
+        push @online_table, "$pnum,$tty";
     }
 }
 
 
-# Update Project table
-if ( $cur_prjnum eq "" ) {
+# Pick an offline prjnumber or create a new one 
+my $cur_prjnum = GetPnum(@online_table);
 
-    $cur_prjnum = @nochg_table + 1;
-    push @nochg_table, "$cur_prjnum,$cur_tty";
+
+# Create new dirstack if non existent
+unless ( -e "$HOME_DIR/.dirstack/dirstack$cur_prjnum" ) {
 
     `echo \"UN\" >| $HOME_DIR/.dirstack/prjname$cur_prjnum`;
     `echo ' 0  $HOME_DIR' >| $HOME_DIR/.dirstack/dirstack$cur_prjnum`;
-
-} else {
-
-    push @nochg_table, "$cur_prjnum,$cur_tty";
 }
 
+
+# Add new entry to online table
+push @online_table, "$cur_prjnum,$cur_tty";
+
+
+# Replace project table with updated online table
 open(FF,">$HOME_DIR/.dirstack/prjtable.txt") || die "cant open file\n";
-print FF $_."\n" for (@nochg_table);
+print FF $_."\n" for (@online_table);
 close(FF);
 
 
@@ -56,8 +63,11 @@ close(FF);
 print $cur_prjnum;
 
 
-###################################################
-###################################################
+
+###########################################################
+####   Subroutines                      ###################
+###########################################################
+
 sub isMember {
     my ($element, $ref) = @_;
     my $result = 0;
@@ -66,3 +76,25 @@ sub isMember {
     }
     return($result);
 }
+
+
+sub GetPnum {
+
+    return (1) if (@_ == 0);   
+
+    my @p_nums = map { @a = split(",", $_); $a[0] } @_;
+
+    my %REC = map { $_ => 1 } @p_nums;
+
+    for ( my $i=1; $i <= max(@p_nums)+1; $i++ ) {
+        if (not defined $REC{$i}) {
+            return($i);
+        }
+    }
+}
+
+sub max {
+    my @tmp = sort { $a <=> $b } @_;
+    return $tmp[$#tmp];
+}
+
