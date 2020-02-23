@@ -20,7 +20,7 @@ function updatedirs()
 # Set the title of an xterm to $PWD
 function xtitle()
 {
-    echo -ne "\033]0;[$prj_num][$PRJN]:$(basename "$(pwd)")\a"
+    echo -ne "\033]0;[P$prj_num][$PRJN]-[T$CUR_TTY]:$(basename "$(pwd)")\a"
 }
 
 
@@ -223,6 +223,7 @@ export prj_num=$(getprjnum)
 # Update Project Name and dirstack
 export PRJN=$(cat $HOME/.dirstack/prjname$prj_num)
 export DIRSFILE="$HOME/.dirstack/dirstack$prj_num"
+export CUR_TTY=$(tty|sed -e 's/[^0-9]//g')
 
 # Load dirstack and Initialize dir# variables
 dirlist=( `sort -k1nr $HOME/.dirstack/dirstack$prj_num|cut -c5-` )
