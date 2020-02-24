@@ -43,10 +43,10 @@ $> dt
         |__ Pictures........................................(2)
 
 ```
-Now you can either navigate to a directory by its number ([`r`](#rotate-to-a-directory)) or enter into a new directory. In the latter case you can either replace the current directory ( `cd` new_directory )  or keep the current directory and push a new one to the stack ( [`pu`](#push-to-a-new-directory) ).
+Now you can either navigate to a directory by its number ([`r`](#rotate-to-a-directory)) or enter into a new directory. In the latter case you can either replace the current directory ( `cd` new_directory )  or save the current directory and push a new one to the directory stack and `cd` to it ( [`pu`](#push-in-a-new-directory) ).
 
 ### Rotate to a directory
-After you type `dt` and view the directory tree, find the corresponding directory number for the directory you want to rotate to, say "2" and then type `r` 2.
+After you type `dt` and view the directory tree, find the corresponding directory number (`NUM`) for the directory you want to rotate to and type `r NUM`. Say if we want to switch to directory `2`
 
 ```
 $> r 2
@@ -72,9 +72,9 @@ What you will see is the content of the target directory (directory 2, "Pictures
 Note that the previously visited directory "Fun" becomes directory 1. You can simply type `r` to switch back to "Fun". Then "Pictures" will become directory 1 again. So in other words, typing `r` can help you toggle between two directories back and forth without resorting to directory numbers.
 
 
-### Push to a new directory
+### Push in a new directory
 
-Suppose you are at directory "Pictures" as shown in last section and you would like to enter ~/Sandbox without losing track of "Pictures". You can simply type `pu` ~/Sandbox to switch to ~/Sandbox.
+Suppose you are at directory "Pictures" as shown in last section and you would like to enter ~/Sandbox without losing track of "Pictures". You can simply type `pu ~/Sandbox` to switch to ~/Sandbox.
 
 ```
 $> pu ~/Sandbox/
@@ -89,5 +89,25 @@ $> pu ~/Sandbox/
         |__ Pictures........................................(1)
         |__ Sandbox.........................................(0)
 ```
+
+
+### Remove a directory 
+
+Simply type `po` will remove the current directory (directory 0) or `po NUM` which will remove directory `NUM`. Continue with above example, say if we want to remove directory 2 ('Fun').
+
+```
+$> po 2
+|__ Users
+    |__ dashagen............................................(2)
+        |__ Music
+        |   |__ iTunes......................................(3)
+        |   
+        |__ Pictures........................................(1)
+        |__ Sandbox.........................................(0)
+```
+
+### Load a saved directory stack 
+
+If you have saved the directory stack from `~/.dirstack/dirstack#`, you can later reload it by typing `lstack <dirstack file>`
 
 
