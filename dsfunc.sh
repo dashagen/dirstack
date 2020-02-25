@@ -223,6 +223,11 @@ export prj_num=$(getprjnum)
 # Update Project Name and dirstack
 export PRJN=$(cat $HOME/.dirstack/prjname$prj_num)
 export DIRSFILE="$HOME/.dirstack/dirstack$prj_num"
+
+# AIX/Linux
+# export CUR_TTY=$(tty|sed -e 's/.*\///g')
+
+# MacOS
 export CUR_TTY=$(tty|sed -e 's/[^0-9]//g')
 
 # Load dirstack and Initialize dir# variables
