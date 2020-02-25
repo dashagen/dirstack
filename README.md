@@ -18,33 +18,14 @@
 
 ### Launching the terminal
 Whenever your terminal is opened, previous directory stack associated with the current tty number will be loaded. 
-<img src="./doc/ds1.png" width="400"/>
+<img src="./doc/ds1.png" width="500"/>
 
-```
-Previously...
- 0  /Users/dashagen/Documents/Fun
- 1  /Users/dashagen/Music/iTunes
- 2  /Users/dashagen/Pictures
- 3  /Users/dashagen
-
-```
 And you will be at directory 0 (in this case "/Users/dashagen/Documents/Fun"). You can then navigate the directories as usual. Following are the commands:
 
 ### List directory tree
 type `dt` to list the directory tree. In actual terminal the directory 0 will be in blue background and directory 1, the one last visited, will be highligted in red.
-```
-$> dt
-|__ Users
-    |__ dashagen............................................(3)
-        |__ Documents
-        |   |__ Fun.........................................(0)
-        |   
-        |__ Music
-        |   |__ iTunes......................................(1)
-        |   
-        |__ Pictures........................................(2)
+<img src="./doc/ds2.png" width="500"/>
 
-```
 Now you can either navigate to a directory by its number ([`r`](#rotate-to-a-directory)) or enter into a new directory. In the latter case you can either replace the current directory ( `cd` new_directory )  or save the current directory and push a new one to the directory stack and `cd` to it ( [`pu`](#push-in-a-new-directory) ).
 
 ### Rotate to a directory
