@@ -39,25 +39,14 @@ Note that the previously visited directory "Fun" becomes directory 1. You can si
 ### Push in a new directory
 
 Suppose you are at directory "vacation" as shown in last section and you would like to enter ~/Sandbox without losing track of "vacation". You can simply type `pu ~/Sandbox` to switch to ~/Sandbox.
-
 <br><img src="./doc/ds4.png" width="500"/>
-
 
 
 ### Remove a directory 
 
 Simply type `po` will remove the current directory (directory 0) or `po NUM` which will remove directory `NUM`. Continue with above example, say if we want to remove directory 2 ('Fun').
 
-```
-$> po 2
-|__ Users
-    |__ dashagen............................................(2)
-        |__ Music
-        |   |__ iTunes......................................(3)
-        |   
-        |__ Pictures........................................(1)
-        |__ Sandbox.........................................(0)
-```
+<br><img src="./doc/ds5.png" width="500"/>
 
 ### Load a saved directory stack 
 
