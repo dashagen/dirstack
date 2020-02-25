@@ -45,7 +45,6 @@ Suppose you are at directory "vacation" as shown in last section and you would l
 ### Remove a directory 
 
 Simply type `po` will remove the current directory (directory 0) or `po NUM` which will remove directory `NUM`. Continue with above example, say if we want to remove directory 2 ('Fun').
-
 <br><img src="./doc/ds5.png" width="500"/>
 
 ### Load a saved directory stack 
