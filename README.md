@@ -18,6 +18,8 @@
 
 ### Launching the terminal
 Whenever your terminal is opened, previous directory stack associated with the current tty number will be loaded. 
+<img src="./doc/ds1.png" width="200"/>
+
 ```
 Previously...
  0  /Users/dashagen/Documents/Fun
