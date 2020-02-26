@@ -17,21 +17,21 @@
 ## Usage
 
 ### Launching the terminal
-Whenever your terminal is opened, previous directory stack associated with the current tty number will be loaded. 
+Whenever your terminal is launched, previous directory stack associated with the current tty number will be loaded. 
 <img src="./doc/ds1.png" width="550"/>
 
-And you will be at directory 0 (in this case "/Users/dashagen/Documents/Fun"). You can then navigate the directories as usual. Following are the commands:
+And you will be at directory 0 (in this case "/Users/dashagen/Documents/Fun"). You can then navigate through the directories as usual. Following are the commands:
 
 ### List directory tree
-type `dt` to list the directory tree. In actual terminal the directory 0 will be in blue background and directory 1, the one last visited, will be highligted in red. <br><img src="./doc/ds2.png" width="550"/>
+type `dt` to list the directory tree. Directory 0, the current directory, will be in blue background and directory 1, the one last visited, will be highligted in red. <br><img src="./doc/ds2.png" width="550"/>
 
-Now you can either navigate to a directory by its number ([`r`](#rotate-to-a-directory)) or enter into a new directory. In the latter case you can either replace the current directory ( `cd` new_directory )  or save the current directory and push a new one to the directory stack and `cd` to it ( [`pu`](#push-in-a-new-directory) ).
+Now you can either navigate to a directory by its number ([`r NUM`](#rotate-to-a-directory)) or enter into a new directory. In the latter case you can either replace the current directory ( `cd new_directory` )  or save the current directory and push a new one to the directory stack and `cd` to it ( [`pu`](#push-in-a-new-directory) ).
 
 ### Rotate to a directory
-After you type `dt` and view the directory tree, find the corresponding directory number (`NUM`) for the directory you want to rotate to and type `r NUM`. Say if we want to switch to directory `3`
+After you type `dt` and view the directory tree, find the corresponding directory number (`NUM`) for the directory you want to rotate to, then type `r NUM`. Say if we want to switch to directory `3`
 <br><img src="./doc/ds3.png" width="550"/>
 
-What you will see is the content of the target directory (directory 3, "vacation") and the directory stack has been refreshed and you will be currently at "vacation" and it becomes directory 0.
+What you will see is the content of the target directory (directory 3, "vacation"). Meanwhile the directory stack has been refreshed and you will be currently at "vacation" which becomes directory 0.
 
 Note that the previously visited directory "Fun" becomes directory 1. You can simply type `r` to switch back to "Fun". Then "vacation" will become directory 1 again. So in other words, typing `r` can help you toggle between two directories back and forth without resorting to directory numbers.
 
@@ -49,6 +49,6 @@ Simply type `po` will remove the current directory (directory 0) or `po NUM` whi
 
 ### Load a saved directory stack 
 
-If you have saved the directory stack from `~/.dirstack/dirstack#`, you can later reload it by typing `lstack <dirstack file>`
+If you have saved the directory stack from `~/.dirstack/dirstack#` to a separate file, you can later reload it by typing `lstack <dirstack file>`
 
 
