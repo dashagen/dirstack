@@ -3,12 +3,12 @@
 my $HOME_DIR = $ENV{'HOME'};
 
 # Get current tty number
-my $cur_tty = `tty|sed 's/.*\\///g'`;
+my $cur_tty = `tty|sed -e 's/[^0-9]//g'`;
 chomp $cur_tty;
 
 
 # Get online ttys
-my @online_ttys = `find /dev/pts -user \$USER | sed -e 's/.*\\///g' | grep -v -w $cur_tty`;
+my @online_ttys = `find /dev/ttys* -user \$USER | sed -e 's/[^0-9]//g' | grep -v -w $cur_tty`;
 chomp @online_ttys;
 
 
