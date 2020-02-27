@@ -52,3 +52,6 @@ Simply type `po` will remove the current directory (directory 0) or `po NUM` whi
 If you have saved the directory stack from `~/.dirstack/dirstack#` to a separate file, you can later reload it by typing `lstack <dirstack file>`
 
 
+## License
+
+[MIT licensed](https://github.com/dashagen/dirstack-plus/blob/master/LICENSE).
